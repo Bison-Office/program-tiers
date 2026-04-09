@@ -1104,10 +1104,20 @@ const programs = {
   }
 };
 
-// Persist checkbox state to localStorage
+// Persist checkbox state via URL hash (primary) + localStorage (fallback)
 var STORAGE_KEY = 'b2c-program-tiers-walter-co';
 
-function getCheckedState() {
+function getCheckedFromHash() {
+  var hash = window.location.hash.replace('#', '');
+  if (!hash) return null;
+  var state = {};
+  hash.split(',').forEach(function(id) {
+    if (id.trim()) state[id.trim()] = true;
+  });
+  return Object.keys(state).length > 0 ? state : null;
+}
+
+function getCheckedFromStorage() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
   } catch (e) {
@@ -1115,15 +1125,30 @@ function getCheckedState() {
   }
 }
 
+function getCheckedState() {
+  return getCheckedFromHash() || getCheckedFromStorage();
+}
+
 function saveCheckedState() {
-  var state = {};
+  var checked = [];
   document.querySelectorAll('.program-card').forEach(function(card) {
     var id = card.getAttribute('data-program');
     if (id && card.classList.contains('selected')) {
-      state[id] = true;
+      checked.push(id);
     }
   });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  // Save to URL hash
+  if (checked.length > 0) {
+    history.replaceState(null, '', '#' + checked.join(','));
+  } else {
+    history.replaceState(null, '', window.location.pathname);
+  }
+  // Save to localStorage as fallback
+  try {
+    var state = {};
+    checked.forEach(function(id) { state[id] = true; });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {}
 }
 
 function toggleCheckbox(card) {
