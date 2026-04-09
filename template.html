@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B2C Partnership Programs - {{SUPPLIER_NAME}} - Bison Commerce</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f8f9fa;
+    color: #1a2332;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 1400px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+
+  .header {
+    margin-bottom: 28px;
+  }
+
+  .header h1 {
+    font-size: 42px;
+    font-weight: 900;
+    color: #1a2332;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+
+  .header .subtitle {
+    font-size: 18px;
+    color: #8a929e;
+    margin-top: 6px;
+    font-weight: 400;
+  }
+
+  .main-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  /* Wider arrow column */
+  .arrow-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 96px;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  .arrow-svg {
+    width: 96px;
+    display: block;
+  }
+
+  .tiers-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tier-label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #5a6370;
+    margin-bottom: 4px;
+    padding-top: 10px;
+    letter-spacing: 0.2px;
+  }
+
+  .tier-group:first-child .tier-label {
+    padding-top: 0;
+  }
+
+  .tier-label span {
+    font-style: italic;
+    margin-left: 4px;
+  }
+
+  /* Grid for equal-width cards: 6 columns matching Foundation row */
+  .programs-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+
+  .program-card {
+    background: #ffffff;
+    border: 1.5px solid #dde0e5;
+    border-radius: 10px;
+    padding: 10px 12px 8px 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 90px;
+    overflow: hidden;
+  }
+
+  .program-card:hover {
+    border-color: #c75028;
+    box-shadow: 0 4px 16px rgba(199, 80, 40, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .program-card:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(199, 80, 40, 0.1);
+  }
+
+  /* Selected state */
+  .program-card.selected {
+    background: #E8F3E1;
+    border-color: #70AD47;
+  }
+
+  .program-card.selected:hover {
+    border-color: #5a9a36;
+    box-shadow: 0 4px 16px rgba(112, 173, 71, 0.2);
+  }
+
+  .program-card.selected .checkbox {
+    background: #70AD47;
+    border-color: #70AD47;
+  }
+
+  .program-card.selected .checkbox::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-top: -2px;
+  }
+
+  /* Checkbox aligned with text top */
+  .program-card .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .program-card .checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid #b0b6be;
+    border-radius: 3px;
+    background: #fff;
+    margin-top: 0px;
+    position: relative;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .program-card .checkbox:hover {
+    border-color: #9aa0a8;
+    background: #f4f5f7;
+  }
+
+  .program-card.selected .checkbox:hover {
+    background: #5a9a36;
+    border-color: #5a9a36;
+  }
+
+  .program-card .card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a2332;
+    line-height: 1.3;
+  }
+
+
+
+  .program-card .card-icon {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    opacity: 0.65;
+    overflow: hidden;
+    transition: opacity 0.15s;
+  }
+
+  .program-card .card-icon:hover {
+    opacity: 1;
+  }
+
+  .program-card .card-icon img {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+
+  /* Modal overlay */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(26, 35, 50, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal {
+    background: #ffffff;
+    border-radius: 16px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+    animation: slideUp 0.25s ease;
+  }
+
+  .modal-header {
+    padding: 28px 32px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .modal-header .modal-tier-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .badge-foundation { background: #e8edf2; color: #4a5568; }
+  .badge-growth { background: #fef3ed; color: #F03A12; }
+  .badge-scale { background: #edf7ed; color: #2d7a3a; }
+  .badge-strategic { background: #eef0f8; color: #3b4fa0; }
+
+  .modal-header h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a2332;
+    line-height: 1.2;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #8a929e;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    line-height: 1;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    margin-left: 16px;
+  }
+
+  .modal-close:hover {
+    background: #f4f5f7;
+    color: #1a2332;
+  }
+
+  .modal-body {
+    padding: 20px 32px 32px;
+  }
+
+  .modal-body .summary {
+    font-size: 16px;
+    line-height: 1.65;
+    color: #3d4654;
+    margin-bottom: 20px;
+  }
+
+  .modal-body .detail-section {
+    margin-bottom: 16px;
+  }
+
+  .modal-body .detail-section h3 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #8a929e;
+    margin-bottom: 8px;
+  }
+
+  .modal-body .detail-section ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .modal-body .detail-section ul li {
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #3d4654;
+  }
+
+  .modal-body .detail-section ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #F03A12;
+  }
+
+  .modal-body .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .modal-body .metric-box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .modal-body .metric-box .metric-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #F03A12;
+  }
+
+  .modal-body .metric-box .metric-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8a929e;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>B2C Partnership Programs</h1>
+    <div class="subtitle">{{SUPPLIER_NAME}} Partnership</div>
+  </div>
+
+  <div class="main-layout">
+    <!-- Sales Growth Arrow (wider) -->
+    <div class="arrow-column">
+      <svg class="arrow-svg" viewBox="0 0 96 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="arrowGrad" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#b8d4a0"/>
+            <stop offset="50%" stop-color="#6aab3d"/>
+            <stop offset="100%" stop-color="#3d8c2e"/>
+          </linearGradient>
+        </defs>
+        <path d="M48 0 L96 90 L70 90 L70 600 L26 600 L26 90 L0 90 Z" fill="url(#arrowGrad)" opacity="0.85"/>
+        <text x="48" y="390" text-anchor="middle" dominant-baseline="central" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#ffffff" transform="rotate(-90, 48, 390)" letter-spacing="2">SALES GROWTH</text>
+      </svg>
+    </div>
+
+    <!-- Tiers -->
+    <div class="tiers-column">
+
+      <!-- IV. Strategic -->
+      <div class="tier-group">
+        <div class="tier-label">IV. <span>Strategic</span></div>
+        <div class="programs-row">
+          <div class="program-card" data-program="inventory" aria-label="Inventory Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Inventory Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/pallet-stacked-boxes.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="private-label" aria-label="Private Label Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Private Label Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/diamond.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="managed-seller" aria-label="Managed Seller Services Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Managed Seller Services Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/mountain.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- III. Scale -->
+      <div class="tier-group">
+        <div class="tier-label">III. <span>Scale</span></div>
+        <div class="programs-row">
+          <div class="program-card" data-program="new-sku" aria-label="New SKU Launch Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">New SKU Launch Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/spaceship.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="review-acceleration" aria-label="Review Acceleration Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Review Acceleration Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/add-like.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="social-media" aria-label="Social Media Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Social Media Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/love-message.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="sfp" aria-label="Seller Fulfilled Prime Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Seller Fulfilled Prime Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/cart-speed.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- II. Growth -->
+      <div class="tier-group">
+        <div class="tier-label">II. <span>Growth</span></div>
+        <div class="programs-row">
+          <div class="program-card" data-program="rebate" aria-label="Rebate Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Rebate Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/trophy.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="white-label" aria-label="White Label Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">White Label Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/tag.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="listing-optimization" aria-label="Listing Optimization Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Listing Optimization Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/window-cursor.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="exclusivity" aria-label="Exclusivity Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Exclusivity Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/chess-king.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="1p-to-3p" aria-label="1P to 3P Conversion Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">1P to 3P Conversion Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/swap-horizontal.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- I. Foundation -->
+      <div class="tier-group">
+        <div class="tier-label">I. <span>Foundation</span></div>
+        <div class="programs-row">
+          <div class="program-card" data-program="damage-defects" aria-label="Damage &amp; Defects Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Damage & Defects Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/broken-heart.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="returns" aria-label="Returns Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Returns Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/repeat-cycle.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="promotions" aria-label="Promotions Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Promotions Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/speaker.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="advertising" aria-label="Advertising Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Advertising Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/control-panel-3.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="clearance" aria-label="Clearance Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">Clearance Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/discount-2.svg" alt=""></div>
+          </div>
+          <div class="program-card" data-program="b2b" aria-label="B2B Program">
+            <div class="card-top">
+              <div class="checkbox"></div>
+              <div class="card-name">B2B Program</div>
+            </div>
+            <div class="card-icon"><img src="../icons/briefcase-24-3.svg" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-tier-badge" id="modalBadge"></div>
+        <h2 id="modalTitle"></h2>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const programs = {
+  'damage-defects': {
+    title: 'Damage & Defects Program',
+    tier: 'Foundation',
+    badge: 'badge-foundation',
+    summary: 'Covers the cost of units received damaged or defective by the end customer. This is the non-negotiable foundation of every supplier agreement, with a minimum 3% DDR allowance that funds claim processing, replacement coordination, and disposal.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Standard 3% DDR (Damage, Defect, Returns) allowance on all supplier agreements',
+          '4% DDR for products shipped via LTL freight due to higher damage incidence',
+          'Covers claim processing, replacement coordination, and product disposal',
+          'DDR is non-negotiable. A supplier with 0% DDR means Bison absorbs all damage costs with no coverage'
+        ]
+      },
+      {
+        title: 'Key Metrics',
+        metrics: [
+          { value: '3%', label: 'Standard DDR' },
+          { value: '4%', label: 'LTL DDR' },
+          { value: '$2.7M', label: 'FY2026 Budget' },
+          { value: '~2.6%', label: 'Current Actual' }
+        ]
+      }
+    ]
+  },
+  'returns': {
+    title: 'Returns Program',
+    tier: 'Foundation',
+    badge: 'badge-foundation',
+    summary: 'Covers return handling, reverse logistics, restocking, and resale of returned inventory. The standard 2% returns allowance offsets a portion of return costs and keeps the partnership healthy.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Standard 2% returns allowance included in the base 8% supplier agreement',
+          'Covers reverse logistics, restocking, and resale/liquidation of returned items',
+          'Can be replaced by a No-Returns (DFI) agreement at 2-4%, where Bison handles all disposal and liquidation',
+          'Refund rate thresholds: green at 5% or below, red above 10%'
+        ]
+      },
+      {
+        title: 'No-Returns Alternative',
+        items: [
+          'Ground items: 2-3% DFI allowance',
+          'LTL items: 3-4% DFI allowance (higher due to return shipping cost)',
+          'DFI replaces the standard returns allowance, it does not stack on top',
+          'Simplifies operations for both parties when return volumes are high'
+        ]
+      }
+    ]
+  },
+  'promotions': {
+    title: 'Promotions Program',
+    tier: 'Foundation',
+    badge: 'badge-foundation',
+    summary: 'Coordinates promotional events, seasonal campaigns, and strategic pricing across all marketplaces. Suppliers opt in to planned events throughout the year, driving volume through MAP breaks and targeted discounting.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Annual promotional calendar with planned events across all marketplaces',
+          'Supplier opt-in workflow for each promotional event',
+          'MAP break coordination during key shopping periods (Prime Day, Black Friday, etc.)',
+          'Performance tracking per promotion to measure incremental sales lift',
+          'Portfolio-level involvement tracking to ensure balanced participation'
+        ]
+      },
+      {
+        title: 'Supplier Value',
+        items: [
+          'Drives sales volume during high-traffic periods',
+          'Helps generate reviews from increased order volume',
+          'Differentiates against 1P and unauthorized resellers on listings',
+          'Builds momentum for new and underperforming SKUs'
+        ]
+      }
+    ]
+  },
+  'advertising': {
+    title: 'Advertising Program',
+    tier: 'Foundation',
+    badge: 'badge-foundation',
+    summary: 'Co-op advertising program funded by the 3% marketing allowance in every supplier agreement. Covers Amazon Ads, Google Ads, listing optimization, promotional campaigns, and brand content creation.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          '3% marketing allowance included in the base 8% supplier agreement',
+          'Funds Sponsored Products, Sponsored Brands, and Sponsored Display on Amazon',
+          'Google Ads and retargeting campaigns for direct channel traffic',
+          'Brand content creation including A+ Content, storefronts, and video ads'
+        ]
+      },
+      {
+        title: 'Key Metrics',
+        metrics: [
+          { value: '3%', label: 'Marketing Allowance' },
+          { value: '$2.3M', label: 'FY2026 Budget' },
+          { value: '$1.2M', label: 'Ad Spend' },
+          { value: '~2.2%', label: 'Current Actual' }
+        ]
+      }
+    ]
+  },
+  'clearance': {
+    title: 'Clearance Program',
+    tier: 'Foundation',
+    badge: 'badge-foundation',
+    summary: 'Moves aged, slow-moving, or excess inventory efficiently to reduce holding costs and free up capital. Uses markdown strategies and liquidation channels to minimize losses on non-performing SKUs.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Identifies slow-moving and aged inventory across the catalog',
+          'Progressive markdown strategy to move stock before it becomes a liability',
+          'Liquidation channels for deeply discounted disposal when needed',
+          'Coordinates with supplier on clearance timing and pricing to protect brand image'
+        ]
+      },
+      {
+        title: 'Triggers',
+        items: [
+          'SKUs with 90+ days of inventory and declining sales velocity',
+          'Seasonal items approaching end-of-season',
+          'Discontinued products or packaging changes from the supplier',
+          'Overstock situations from bulk purchase commitments'
+        ]
+      }
+    ]
+  },
+  'b2b': {
+    title: 'B2B Program',
+    tier: 'Foundation',
+    badge: 'badge-foundation',
+    summary: 'Business-to-business pricing and discount programs on Amazon Business. Captures commercial and institutional buyers through bulk pricing tiers, managed quotes, and business-specific promotions.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Bulk pricing tiers configured for quantity-based discounts on Amazon Business',
+          'Managed quotes for large institutional and commercial orders',
+          'Business promotions targeting B2B customers during key purchasing periods',
+          'Differentiates listings against competitors who only target consumer buyers'
+        ]
+      },
+      {
+        title: 'Supplier Value',
+        items: [
+          'Opens a high-volume sales channel with larger average order values',
+          'Institutional buyers (schools, offices, government) tend to have lower return rates',
+          'Complements B2C sales without cannibalizing consumer pricing',
+          'Holiday and seasonal business promotions layer on top of standard B2B pricing'
+        ]
+      }
+    ]
+  },
+  'rebate': {
+    title: 'Rebate Program',
+    tier: 'Growth',
+    badge: 'badge-growth',
+    summary: 'Volume-based rebate tiers that reward supplier growth. The pricing engine automatically adjusts pricing to help suppliers reach their next rebate threshold, aligning incentives between Bison and the supplier.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Tiered rebate structure based on annual purchase volume',
+          'Automated pricing adjustments to help suppliers reach the next tier',
+          'Rebate earned retrospectively once volume thresholds are achieved',
+          'Available to Core and Strategic tier suppliers'
+        ]
+      },
+      {
+        title: 'Rebate Tiers',
+        metrics: [
+          { value: '0.5%', label: '$100K-$250K' },
+          { value: '1.0%', label: '$250K-$500K' },
+          { value: '1.5%', label: '$500K-$1M' },
+          { value: '2.0%', label: '$1M+' }
+        ]
+      },
+      {
+        title: 'Key Metrics',
+        metrics: [
+          { value: '$556K', label: 'FY2026 Budget' }
+        ]
+      }
+    ]
+  },
+  'white-label': {
+    title: 'White Label Program',
+    tier: 'Growth',
+    badge: 'badge-growth',
+    summary: "Suppliers' products sold under Bison Commerce's own brand names on marketplaces. A controlled profitability play with stable 8-9% margins, scaling from $1.31M in 2025 to a projected $5.04M in 2026.",
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          "Supplier products are listed under Bison Commerce's own brand names",
+          'Separate pricing and promotions from the original branded SKU',
+          'Focus on controlled profitability rather than aggressive ad spend growth',
+          '1-2% white label premium allowance covers brand development and packaging'
+        ]
+      },
+      {
+        title: '2025 Performance',
+        metrics: [
+          { value: '$1.31M', label: 'Revenue' },
+          { value: '8-9%', label: 'Margin' },
+          { value: '60', label: 'Suppliers' },
+          { value: '$5.04M', label: '2026 Target' }
+        ]
+      },
+      {
+        title: 'Focus Categories',
+        items: [
+          'Home office and desks',
+          'Storage and organization',
+          'Area rugs and entryway furniture',
+          'Outdoor furniture'
+        ]
+      }
+    ]
+  },
+  'listing-optimization': {
+    title: 'Listing Optimization Program',
+    tier: 'Growth',
+    badge: 'badge-growth',
+    summary: 'Comprehensive content enhancement for marketplace listings. Covers brand registry, product descriptions, keywords, A+ Content, lifestyle photography, videography, and search optimization to maximize conversion rates.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Brand registry assistance to unlock enhanced content features',
+          'Product description enrichment and keyword optimization',
+          'A+ Content creation with rich media and comparison charts',
+          'Professional lifestyle photography and videography',
+          'AI-powered image generation for supplementary visuals',
+          'Requires minimum 2-year exclusivity for the optimized listing'
+        ]
+      },
+      {
+        title: 'Content Services',
+        items: [
+          'Title, bullet points, and description rewrite for SEO',
+          'Backend search term optimization',
+          'Infographic and lifestyle image creation',
+          'Product video production for listings and ads',
+          'Storefront design and brand story pages'
+        ]
+      }
+    ]
+  },
+  'exclusivity': {
+    title: 'Exclusivity Program',
+    tier: 'Growth',
+    badge: 'badge-growth',
+    summary: 'The single highest-impact growth lever identified for 2026. Each full exclusivity deal is valued at $1M+ net profit. Exclusive 3P distribution rights eliminate price competition from other resellers, enabling margin control without Buy Box pressure.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Supplier grants exclusive 3P distribution rights on one or more marketplaces',
+          'Eliminates competing resellers and protects Buy Box ownership',
+          'Enables full pricing control and margin optimization',
+          '1-2% exclusivity premium allowance on top of base program'
+        ]
+      },
+      {
+        title: 'Impact',
+        metrics: [
+          { value: '$1M+', label: 'Net Profit Each' },
+          { value: '#1', label: 'Growth Lever' },
+          { value: '1-2%', label: 'Premium Allowance' }
+        ]
+      },
+      {
+        title: 'Supplier Value',
+        items: [
+          'Brand protection through authorized reseller control',
+          'MAP compliance enforcement across marketplace',
+          'Premium listing content and advertising investment',
+          'Dedicated account management and strategic planning'
+        ]
+      }
+    ]
+  },
+  '1p-to-3p': {
+    title: '1P to 3P Conversion Program',
+    tier: 'Growth',
+    badge: 'badge-growth',
+    summary: 'Helps suppliers transition from selling directly to Amazon as a 1P vendor (Vendor Central) to using Bison Commerce as their 3P partner on Seller Central. Gives suppliers more control over pricing, inventory, and brand while leveraging Bison\'s marketplace infrastructure.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Identifies suppliers currently selling via Amazon 1P (Vendor Central)',
+          'Builds the business case for 3P transition: pricing control, margin improvement, brand ownership',
+          'Manages the migration of ASINs from 1P to 3P listings',
+          'Handles ongoing marketplace operations after conversion'
+        ]
+      },
+      {
+        title: 'Why Suppliers Convert',
+        items: [
+          'Amazon 1P dictates pricing, often below MAP, destroying brand value',
+          '3P model gives the supplier (via Bison) control over retail price',
+          'Higher margins compared to 1P wholesale terms',
+          'Better inventory visibility and demand planning',
+          'Rising tariffs make 1P wholesale economics increasingly unfavorable'
+        ]
+      }
+    ]
+  },
+  'new-sku': {
+    title: 'New SKU Launch Program',
+    tier: 'Scale',
+    badge: 'badge-scale',
+    summary: 'Coordinated new product introductions with automated advertising activation. The system launches ads automatically the moment an ASIN and stock become available, targeting a 50% reduction in time-to-live-campaign.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Automated ad campaign creation triggered when new ASIN + inventory are confirmed',
+          'Pre-configured campaign templates based on product category and price point',
+          'Increased advertising investment during the first 90 days to build traction',
+          '2-3% new supplier launch allowance covers listing creation and initial advertising'
+        ]
+      },
+      {
+        title: 'Impact',
+        metrics: [
+          { value: '50%', label: 'Faster Time-to-Live' },
+          { value: '90 days', label: 'Launch Window' },
+          { value: '2-3%', label: 'Launch Allowance' }
+        ]
+      }
+    ]
+  },
+  'review-acceleration': {
+    title: 'Review Acceleration Program',
+    tier: 'Scale',
+    badge: 'badge-scale',
+    summary: 'Accelerates product review generation through multiple channels to build social proof and improve conversion rates. Combines Amazon Vine, insert cards, email campaigns, and strategic promotional pricing.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Amazon Vine enrollment: $200 per ASIN + free product + free shipping (FBA products only)',
+          'Compliant insert cards/QR codes in all Amazon shipments encouraging reviews',
+          'Single-use discount codes sent to supplier\'s existing customer base to drive Amazon purchases',
+          'Strategic promotional pricing (MAP breaks) to maximize order volume and review generation',
+          'Increased ad spend during first 90 days to build digital brand equity'
+        ]
+      },
+      {
+        title: 'Best Practices',
+        items: [
+          'Vine works best for smaller, cheaper, high-volume items in crowded categories',
+          'Insert cards must comply with Amazon TOS (soft ask, no incentivized reviews)',
+          'Leverage supplier\'s newsletter and direct channel for cross-pollination',
+          'Focus on top sellers first to build a strong review foundation'
+        ]
+      }
+    ]
+  },
+  'social-media': {
+    title: 'Social Media Program',
+    tier: 'Scale',
+    badge: 'badge-scale',
+    summary: 'Joint social media campaigns across major platforms to drive external traffic to marketplace listings. Includes organic content, paid advertising, influencer partnerships, and affiliate marketing programs.',
+    sections: [
+      {
+        title: 'Channels',
+        items: [
+          'TikTok: short-form video content and TikTok Shop integration',
+          'Facebook: targeted advertising and marketplace syndication',
+          'Instagram: lifestyle content, Stories, and shopping features',
+          'Pinterest: product pins and inspiration boards for home/office categories'
+        ]
+      },
+      {
+        title: 'Programs',
+        items: [
+          'Affiliate Program: commission-based partnerships with content creators',
+          'Influencer Program: paid partnerships for product reviews and unboxings',
+          'Customer Review Program (Vine): coordinated review generation across channels',
+          'Joint content creation with supplier marketing teams'
+        ]
+      }
+    ]
+  },
+  'sfp': {
+    title: 'Seller Fulfilled Prime Program',
+    tier: 'Scale',
+    badge: 'badge-scale',
+    summary: "Enables products to display Amazon's Prime badge while being fulfilled directly from Bison Commerce's warehouse network. Provides Prime visibility benefits with more control over fulfillment operations and lower fees than FBA.",
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          "Products display the Prime badge on Amazon while fulfilled from Bison's warehouses",
+          'Must meet Amazon\'s strict delivery speed and reliability requirements',
+          'Lower fulfillment fees compared to FBA for large/heavy items',
+          'More control over inventory placement and fulfillment operations'
+        ]
+      },
+      {
+        title: 'Advantages Over FBA',
+        items: [
+          'Significantly lower fees for oversized and heavy items (furniture, equipment)',
+          'No FBA long-term storage fees or inventory limits',
+          'Ability to customize packaging and include marketing inserts',
+          'Better suited for Bison\'s large-format product categories'
+        ]
+      }
+    ]
+  },
+  'inventory': {
+    title: 'Inventory Program',
+    tier: 'Strategic',
+    badge: 'badge-strategic',
+    summary: 'Strategic inventory management where Bison Commerce holds consignment stock or manages inventory positioning across fulfillment centers. Reserved for top strategic suppliers to reduce stockout risk and optimize availability.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Consignment inventory held in Bison warehouses for strategic suppliers',
+          'Demand forecasting and replenishment planning based on sales velocity',
+          'Strategic positioning across fulfillment centers for faster delivery times',
+          'Reduces stockout risk on high-performing, high-demand SKUs'
+        ]
+      },
+      {
+        title: 'Supplier Value',
+        items: [
+          'Guaranteed stock availability for top sellers during peak seasons',
+          'Reduced lead times and faster order fulfillment',
+          'Shared risk model: Bison invests in inventory for proven performers',
+          'Enables participation in time-sensitive promotions without stockout concern'
+        ]
+      }
+    ]
+  },
+  'private-label': {
+    title: 'Private Label Program',
+    tier: 'Strategic',
+    badge: 'badge-strategic',
+    summary: 'Bison Commerce develops and sells its own branded product lines manufactured by supplier partners. Combines data-driven product selection with premium brand positioning for higher margins and full brand control.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          "Bison Commerce owns the brand, product design, and customer relationship",
+          'Supplier manufactures to Bison\'s specifications under contract',
+          'Multi-marketplace expansion: Amazon, Wayfair, Lowe\'s, Best Buy, Macy\'s',
+          'Data-driven product selection based on market gap analysis'
+        ]
+      },
+      {
+        title: 'Performance',
+        metrics: [
+          { value: '144', label: 'Orders (Jan 2026)' },
+          { value: '$60K', label: 'Ad Revenue' },
+          { value: '17.8%', label: 'Wayfair ROAS' },
+          { value: '5', label: 'Marketplaces' }
+        ]
+      },
+      {
+        title: 'Strategic Goals',
+        items: [
+          'Private label excellence through data-driven selection and premium positioning',
+          'Strategic vendor partnerships with major brands (e.g., Ashley Furniture)',
+          'Wayfair platform growth with operational excellence',
+          'Scale across Lowe\'s, Best Buy, and Macy\'s'
+        ]
+      }
+    ]
+  },
+  'managed-seller': {
+    title: 'Managed Seller Services Program',
+    tier: 'Strategic',
+    badge: 'badge-strategic',
+    summary: 'A turnkey service model where the supplier uses their own seller account, sets their own price, and outsources all marketplace operations to Bison Commerce for a fee. A completely new revenue model beyond traditional wholesale reselling, with potential up to $2M/month per supplier.',
+    sections: [
+      {
+        title: 'How It Works',
+        items: [
+          'Supplier owns their seller account and controls the retail price',
+          'Bison Commerce operates as an agency partner, not a reseller',
+          'Provides infrastructure, staffing, technology, and marketplace expertise',
+          'Supplier keeps the margin, pays Bison a service fee',
+          'Scalable from starter ($50K/month) to unlimited capacity'
+        ]
+      },
+      {
+        title: 'Revenue Tiers',
+        metrics: [
+          { value: '$50K', label: 'Starter/mo' },
+          { value: '$500K', label: 'Growth/mo' },
+          { value: '$2M', label: 'Scale/mo' },
+          { value: '\u221E', label: 'Enterprise' }
+        ]
+      },
+      {
+        title: 'Why This Model',
+        items: [
+          'Rising tariffs and margin pressure make traditional wholesale less viable',
+          'Suppliers want more pricing control and a greater share of the margin',
+          'Amazon reluctance to absorb cost increases pushes brands toward 3P',
+          'Lower cost for the supplier than building their own marketplace team'
+        ]
+      }
+    ]
+  }
+};
+
+// Persist checkbox state to localStorage
+var STORAGE_KEY = 'b2c-program-tiers-{{SUPPLIER_SLUG}}';
+
+function getCheckedState() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveCheckedState() {
+  var state = {};
+  document.querySelectorAll('.program-card').forEach(function(card) {
+    var id = card.getAttribute('data-program');
+    if (id && card.classList.contains('selected')) {
+      state[id] = true;
+    }
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function toggleCheckbox(card) {
+  card.classList.toggle('selected');
+  saveCheckedState();
+}
+
+function openModal(programId) {
+  const program = programs[programId];
+  if (!program) return;
+
+  document.getElementById('modalBadge').textContent = program.tier;
+  document.getElementById('modalBadge').className = 'modal-tier-badge ' + program.badge;
+  document.getElementById('modalTitle').textContent = program.title;
+
+  let bodyHTML = '<div class="summary">' + program.summary + '</div>';
+
+  program.sections.forEach(function(section) {
+    bodyHTML += '<div class="detail-section">';
+    bodyHTML += '<h3>' + section.title + '</h3>';
+
+    if (section.metrics) {
+      bodyHTML += '<div class="metrics-grid">';
+      section.metrics.forEach(function(m) {
+        bodyHTML += '<div class="metric-box"><div class="metric-value">' + m.value + '</div><div class="metric-label">' + m.label + '</div></div>';
+      });
+      bodyHTML += '</div>';
+    }
+
+    if (section.items) {
+      bodyHTML += '<ul>';
+      section.items.forEach(function(item) {
+        bodyHTML += '<li>' + item + '</li>';
+      });
+      bodyHTML += '</ul>';
+    }
+
+    bodyHTML += '</div>';
+  });
+
+  document.getElementById('modalBody').innerHTML = bodyHTML;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(event) {
+  if (event.target === document.getElementById('modalOverlay')) {
+    closeModal();
+  }
+}
+
+// Initialize cards: restore state, bind events
+var savedState = getCheckedState();
+document.querySelectorAll('.program-card').forEach(function(card) {
+  var programId = card.getAttribute('data-program');
+  // Restore saved checkbox state
+  if (programId && savedState[programId]) {
+    card.classList.add('selected');
+  }
+  // Make icon clickable
+  var iconDiv = card.querySelector('.card-icon');
+  if (iconDiv) {
+    iconDiv.style.cursor = 'pointer';
+  }
+  // Checkbox click toggles highlight only
+  var checkbox = card.querySelector('.checkbox');
+  if (checkbox) {
+    checkbox.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleCheckbox(card);
+    });
+  }
+  // Click anywhere on card (except checkbox) opens popup
+  card.addEventListener('click', function(e) {
+    if (e.target.closest('.checkbox')) return;
+    if (programId) openModal(programId);
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Size the arrow to align its bottom with the bottom of the Foundation programs row
+function sizeArrow() {
+  var tiers = document.querySelector('.tiers-column');
+  var arrow = document.querySelector('.arrow-svg');
+  if (tiers && arrow) {
+    var tiersRect = tiers.getBoundingClientRect();
+    var lastRow = tiers.querySelector('.tier-group:last-child .programs-row');
+    if (lastRow) {
+      var rowRect = lastRow.getBoundingClientRect();
+      var arrowHeight = rowRect.bottom - tiersRect.top;
+      arrow.style.height = arrowHeight + 'px';
+    }
+  }
+}
+sizeArrow();
+window.addEventListener('resize', sizeArrow);
+</script>
+
+</body>
+</html>
