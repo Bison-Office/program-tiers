@@ -1104,49 +1104,25 @@ const programs = {
   }
 };
 
-// Persist checkbox state via URL hash (primary) + localStorage (fallback)
+// Persist checkbox state to localStorage
 var STORAGE_KEY = 'b2c-program-tiers-walter-co';
 
-function getCheckedFromHash() {
-  var hash = window.location.hash.replace('#', '');
-  if (!hash) return null;
-  var state = {};
-  hash.split(',').forEach(function(id) {
-    if (id.trim()) state[id.trim()] = true;
-  });
-  return Object.keys(state).length > 0 ? state : null;
-}
-
-function getCheckedFromStorage() {
+function getCheckedState() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    var data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : {};
   } catch (e) {
     return {};
   }
 }
 
-function getCheckedState() {
-  return getCheckedFromHash() || getCheckedFromStorage();
-}
-
 function saveCheckedState() {
-  var checked = [];
-  document.querySelectorAll('.program-card').forEach(function(card) {
+  var state = {};
+  document.querySelectorAll('.program-card.selected').forEach(function(card) {
     var id = card.getAttribute('data-program');
-    if (id && card.classList.contains('selected')) {
-      checked.push(id);
-    }
+    if (id) state[id] = true;
   });
-  // Save to URL hash
-  if (checked.length > 0) {
-    history.replaceState(null, '', '#' + checked.join(','));
-  } else {
-    history.replaceState(null, '', window.location.pathname);
-  }
-  // Save to localStorage as fallback
   try {
-    var state = {};
-    checked.forEach(function(id) { state[id] = true; });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {}
 }
@@ -1155,6 +1131,9 @@ function toggleCheckbox(card) {
   card.classList.toggle('selected');
   saveCheckedState();
 }
+
+// Also save on page unload as a safety net
+window.addEventListener('beforeunload', saveCheckedState);
 
 function openModal(programId) {
   const program = programs[programId];
